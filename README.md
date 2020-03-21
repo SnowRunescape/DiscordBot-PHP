@@ -37,5 +37,8 @@ class Hello extends DiscordCommand {
 }
 ```
 
+# Credits
+* Textalk | [Github](https://github.com/Textalk) | [Website](https://www.textalk.se/) 
+
 # Help
 If you don't understand something in the documentation, you are experiencing problems, or you just need a gentle nudge in the right direction, please don't hesitate to join our official [DiscordBot-PHP Server](https://discord.snowdev.com.br).
