@@ -37,6 +37,24 @@ class Hello extends DiscordCommand {
 }
 ```
 
+Events can be created inside commands, to keep the code organized
+
+```PHP
+public function MESSAGE_CREATE($DiscordPHP, $event){
+    Logger::Info('This event handler has been called!');
+}
+```
+
+### Example eventHandler
+
+```PHP
+class MESSAGE_CREATE extends DiscordEventHandler {
+    public function run($DiscordPHP, $event){
+        Logger::Info('This event handler has been called!');
+    }
+}
+```
+
 # Credits
 * Textalk | [Github](https://github.com/Textalk) | [Website](https://www.textalk.se/) 
 
