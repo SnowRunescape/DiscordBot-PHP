@@ -28,7 +28,7 @@ class Hello extends DiscordCommand {
     }
   
     public function onInit(){
-        
+        Logger::Info('Starting command...');
     }
 	
     public function run($DiscordPHP, $args, $event){
@@ -49,6 +49,10 @@ public function MESSAGE_CREATE($DiscordPHP, $event){
 
 ```PHP
 class MESSAGE_CREATE extends DiscordEventHandler {
+    public function onInit(){
+        Logger::Info('Starting eventHandler...');
+    }
+    
     public function run($DiscordPHP, $event){
         Logger::Info('This event handler has been called!');
     }
