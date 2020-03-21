@@ -5,7 +5,7 @@ DiscordBot-PHP is a powerful [PHP](https://github.com/php) module that allows yo
 PHP 5.6 or newer is required.
 
 # Example usage
-```
+```PHP
 require 'vendor\autoload.php';
 
 require 'src/DiscordPHP.php';
@@ -21,8 +21,7 @@ $DiscordPHP->init();
 
 ### Example Command
 
-```
-<?php
+```PHP
 class Usage extends DiscordCommand {
     public function getCommand(){
         return '!hello';
