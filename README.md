@@ -22,7 +22,7 @@ $DiscordPHP->init();
 ### Example Command
 
 ```PHP
-class Usage extends DiscordCommand {
+class Hello extends DiscordCommand {
     public function getCommand(){
         return '!hello';
     }
