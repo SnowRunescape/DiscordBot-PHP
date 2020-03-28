@@ -1,6 +1,8 @@
 # DiscordBot-PHP
 DiscordBot-PHP is a powerful [PHP](https://github.com/php) module that allows you to easily interact with the [Discord API](https://discordapp.com/developers/docs/intro).
 
+![Console](https://i.imgur.com/2Svi59h.png)
+
 # Installation
 PHP 5.6 or newer is required.
 
