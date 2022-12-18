@@ -1,0 +1,24 @@
+<?php
+
+namespace DiscordPHP\Events;
+
+use DiscordPHP\Abstracts\DiscordEventHandler;
+
+class ON_TICK extends DiscordEventHandler
+{
+    private int $lastSendKeepAlive = 0;
+
+    public function onInit() {}
+
+    public function run($event)
+    {
+        if (time() >= ($this->lastSendKeepAlive + 30)) {
+            $this->lastSendKeepAlive = time();
+
+            $this->discord->socket->send([
+                "op" => 1,
+                "d" => 251
+            ]);
+        }
+    }
+}

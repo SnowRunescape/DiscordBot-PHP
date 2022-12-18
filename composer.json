@@ -1,0 +1,22 @@
+{
+  "name": "snowrunescape/DiscordBot-PHP",
+  "description": "Discord Bot PHP",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Bruno Caitano",
+      "email": "snowrunescape@snowdev.com.br",
+      "role": "Owner",
+      "homepage": "https://snowdev.com.br"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "DiscordPHP\\": "src/"
+    }
+  },
+  "require": {
+    "textalk/websocket": "1.5.8"
+  }
+}
