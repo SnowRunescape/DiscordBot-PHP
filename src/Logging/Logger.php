@@ -25,7 +25,7 @@ class Logger
             if (!self::$fpLoghasOpened) {
                 self::$fpLoghasOpened = true;
 
-                self::$fpLog = @fopen(__DIR__ . "/../CONSOLE_LOG.txt", "a");
+                self::$fpLog = @fopen(__DIR__ . "/../../CONSOLE_LOG.txt", "a");
             }
 
             if (self::$fpLog !== false) {
