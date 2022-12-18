@@ -140,6 +140,7 @@ class Event
             "op" => 2,
             "d" => [
                 "token" => $this->discord->getBotToken(),
+                "intents" => 513,
                 "properties" => [
                     "\$os" => "windows",
                     "\$browser" => "SnowDev",

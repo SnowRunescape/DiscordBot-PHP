@@ -7,7 +7,7 @@ use Exception;
 
 class Discord
 {
-    const DISCORD_WSS = "wss://gateway.discord.gg/?v=6&encoding=json";
+    const DISCORD_WSS = "wss://gateway.discord.gg/?v=10&encoding=json";
 
     private string $token;
 
@@ -61,12 +61,26 @@ class Discord
                 "t" => "ON_TICK"
             ]);
 
+            $receive = null;
+
             try {
                 $receive = $this->socket->receive();
+
+                if (is_null($receive)) {
+                    throw new Exception("Nulled");
+                }
+
                 $op = $receive["op"];
 
                 $this->event->eventHandler($receive);
             } catch (Exception $e) {
+                if (is_null($receive) && !$this->botConnected) {
+                    $this->botForceStop = true;
+
+                    Logger::Warning('Failed to authenticate TOKEN to discord!');
+                    return;
+                }
+
                 if (
                     $this->lastReadSocketEmpty == time() || (
                         $this->keepAliveSent &&
