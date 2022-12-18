@@ -198,7 +198,9 @@ class DiscordAPI
      */
     private function curlRequest($url, $customRequest, $postFields = null, $contentType = false)
     {
-        $httpHeader = ["Authorization: Bot {$this->discord->getBotToken()}"];
+        $httpHeader = [
+            "Authorization: Bot {$this->discord->getBotToken()}"
+        ];
 
         if ($contentType) {
             array_push($httpHeader, "Content-Type: application/json");
@@ -214,7 +216,7 @@ class DiscordAPI
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_VERBOSE        => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_SSL_VERIFYPEER => 0
         ]);
 
         $curlResponse = curl_exec($curl);

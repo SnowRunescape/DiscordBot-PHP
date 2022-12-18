@@ -15,6 +15,7 @@ class Discord
     public Event $event;
     public Socket $socket;
 
+    public bool $keepAliveSent = false;
     public int $lastReadSocketEmpty = 0;
 
     public bool $botConnected = false;
@@ -52,7 +53,7 @@ class Discord
 
     private function processSocket($stop = 11)
     {
-        $keepAliveSent = false;
+        $this->keepAliveSent = false;
         $op = "";
 
         while ($op !== $stop && $this->socket != null) {
@@ -62,16 +63,16 @@ class Discord
 
             try {
                 $receive = $this->socket->receive();
-
                 $op = $receive["op"];
 
-                if (($op == 11) && $keepAliveSent) {
-                    $keepAliveSent = false;
-                }
-
                 $this->event->eventHandler($receive);
-            } catch(Exception $e) {
-                if ($this->lastReadSocketEmpty == time() || $keepAliveSent) {
+            } catch (Exception $e) {
+                if (
+                    $this->lastReadSocketEmpty == time() || (
+                        $this->keepAliveSent &&
+                        $op != Event::OP["AUTHENTICATION"]
+                    )
+                ) {
                     throw new Exception($e);
                 }
 
