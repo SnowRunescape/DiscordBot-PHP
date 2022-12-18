@@ -74,51 +74,47 @@ class Event
 
     public function executeEvent(array $event)
     {
-/*         if (!$this->discord->botConnected) {
+        if (!$this->discord->botConnected && $event["t"] != "READY") {
             return;
-        } */
-
-try {
-    if (
-        array_key_exists($event["t"], $this->eventsHandler) ||
-        array_key_exists($event["t"], $this->commandsEventsHandler)
-    ) {
-        if ($event["t"] != "ON_TICK") {
-            Logger::Info("Event {$event["t"]} has ben received!");
         }
 
-        if (array_key_exists($event["t"], $this->eventsHandler)) {
-            try {
-                $this->eventsHandler[$event["t"]]->run($event);
-            } catch (Exception $e) {
-                $className = get_class($this->eventsHandler[$event["t"]]);
-
-                Logger::Warning("Error when executing the class {$className}!");
-                Logger::Warning($e->getMessage());
+        if (
+            array_key_exists($event["t"], $this->eventsHandler) ||
+            array_key_exists($event["t"], $this->commandsEventsHandler)
+        ) {
+            if ($event["t"] != "ON_TICK") {
+                Logger::Info("Event {$event["t"]} has ben received!");
             }
-        }
 
-        if (array_key_exists($event["t"], $this->commandsEventsHandler)) {
-            try {
-                foreach ($this->commandsEventsHandler[$event["t"]] as $tempEvent) {
-                    if ($event["t"] == "ON_TICK") {
-                        $tempEvent->{$event["t"]}();
-                    } else {
-                        $tempEvent->{$event["t"]}($event["d"]);
-                    }
+            if (array_key_exists($event["t"], $this->eventsHandler)) {
+                try {
+                    $this->eventsHandler[$event["t"]]->run($event);
+                } catch (Exception $e) {
+                    $className = get_class($this->eventsHandler[$event["t"]]);
+
+                    Logger::Warning("Error when executing the class {$className}!");
+                    Logger::Warning($e->getMessage());
                 }
-            } catch (Exception $e) {
-                /* MUDAR A MENSAGEM DE ERRO AQUI... */
-                $className = get_class($this->commandsEventsHandler[$event["t"]]);
+            }
 
-                Logger::Warning("Error when executing the class {$className}!");
-                Logger::Warning($e->getMessage());
+            if (array_key_exists($event["t"], $this->commandsEventsHandler)) {
+                try {
+                    foreach ($this->commandsEventsHandler[$event["t"]] as $tempEvent) {
+                        if ($event["t"] == "ON_TICK") {
+                            $tempEvent->{$event["t"]}();
+                        } else {
+                            $tempEvent->{$event["t"]}($event["d"]);
+                        }
+                    }
+                } catch (Exception $e) {
+                    /* MUDAR A MENSAGEM DE ERRO AQUI... */
+                    $className = get_class($this->commandsEventsHandler[$event["t"]]);
+
+                    Logger::Warning("Error when executing the class {$className}!");
+                    Logger::Warning($e->getMessage());
+                }
             }
         }
-    }
-} catch (\Throwable $th) {
-    echo $th;
-}
     }
 
     public function loadEvents()
