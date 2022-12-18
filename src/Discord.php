@@ -1,0 +1,97 @@
+<?php
+
+namespace DiscordPHP;
+
+use DiscordPHP\Logging\Logger;
+use Exception;
+
+class Discord
+{
+    const DISCORD_WSS = "wss://gateway.discord.gg/?v=10&encoding=json";
+
+    private string $token;
+
+    public DiscordAPI $discordAPI;
+    public Event $event;
+    public Socket $socket;
+
+    public bool $keepAliveSent = false;
+    public int $lastReadSocketEmpty = 0;
+
+    public bool $botConnected = false;
+    public bool $botForceStop = false;
+    public string $botSessionId;
+
+    public function __construct(string $token)
+    {
+        Logger::Info("Starting DiscordPHP v3.0.0");
+
+        $this->token = $token;
+
+        $this->discordAPI = new DiscordAPI($this);
+        $this->event = new Event($this);
+        $this->socket = new Socket(self::DISCORD_WSS);
+    }
+
+    public function getBotToken()
+    {
+        return $this->token;
+    }
+
+    public function run()
+    {
+        $this->processSocket(0);
+
+        while (
+            $this->botConnected &&
+            !$this->botForceStop &&
+            $this->socket
+        ) {
+            $this->processSocket();
+        }
+    }
+
+    private function processSocket($stop = 11)
+    {
+        $this->keepAliveSent = false;
+        $op = "";
+
+        while ($op !== $stop && $this->socket != null) {
+            $this->event->executeEvent([
+                "t" => "ON_TICK"
+            ]);
+
+            $receive = null;
+
+            try {
+                $receive = $this->socket->receive();
+
+                if (is_null($receive)) {
+                    throw new Exception("Nulled");
+                }
+
+                $op = $receive["op"];
+
+                $this->event->eventHandler($receive);
+            } catch (Exception $e) {
+                if (is_null($receive) && !$this->botConnected) {
+                    $this->botForceStop = true;
+
+                    Logger::Warning('Failed to authenticate TOKEN to discord!');
+                    return;
+                }
+
+                if (
+                    $this->lastReadSocketEmpty == time() || (
+                        $this->keepAliveSent &&
+                        $op != Event::OP["AUTHENTICATION"]
+                    )
+                ) {
+                    throw new Exception($e);
+                }
+
+                $this->lastReadSocketEmpty = time();
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
 <?php
-require '../vendor/autoload.php';
 
-require 'src/DiscordPHP.php';
+require_once "vendor/autoload.php";
 
-$DiscordPHP = new DiscordPHP('YOU_DISCORD_BOT_TOKEN');
-$DiscordPHP->includePlugins();
-$DiscordPHP->init();
+use DiscordPHP\Discord;
+
+$discord = new Discord("YOU_DISCORD_BOT_TOKEN");
+$discord->run();
