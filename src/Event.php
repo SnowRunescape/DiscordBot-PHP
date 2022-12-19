@@ -2,6 +2,8 @@
 
 namespace DiscordPHP;
 
+use DiscordPHP\Abstracts\DiscordCommand;
+use DiscordPHP\Abstracts\DiscordEventHandler;
 use DiscordPHP\Logging\Logger;
 use Exception;
 use Throwable;
@@ -140,7 +142,7 @@ class Event
             "op" => 2,
             "d" => [
                 "token" => $this->discord->getBotToken(),
-                "intents" => 513,
+                "intents" => 32767,
                 "properties" => [
                     "\$os" => "windows",
                     "\$browser" => "SnowDev",
@@ -181,32 +183,28 @@ class Event
         $this->botConnected = false;
     }
 
-    public function registerEventHandler(object $class)
+    public function registerEventHandler(DiscordEventHandler $class)
     {
         try {
             $className = max(explode("\\", get_class($class)));
 
-            if (is_subclass_of($class, "\DiscordPHP\Abstracts\DiscordEventHandler")) {
-                if ((in_array($className, self::$defaultEventsHandler)) || ($className == "ON_TICK")) {
-                    if (!array_key_exists($className, $this->eventsHandler)) {
-                        $this->eventsHandler[$className] = $class;
+            if ((in_array($className, self::$defaultEventsHandler)) || ($className == "ON_TICK")) {
+                if (!array_key_exists($className, $this->eventsHandler)) {
+                    $this->eventsHandler[$className] = $class;
 
-                        Logger::Info("Event {$className} has ben Registred!");
-                    } else {
-                        Logger::Warning("Event {$className} has already been registered!");
-                    }
+                    Logger::Info("Event {$className} has ben Registred!");
                 } else {
-                    Logger::Warning("Event {$className} does not exist!");
+                    Logger::Warning("Event {$className} has already been registered!");
                 }
             } else {
-                Logger::Warning("Failed register event on class {$className}!");
+                Logger::Warning("Event {$className} does not exist!");
             }
         } catch (Exception $e) {
             Logger::Warning("Failed register event on class NULLED!");
         }
     }
 
-    public function registerCommand(object $class)
+    public function registerCommand(DiscordCommand $class)
     {
         $command = strtolower($class->getCommand());
 
