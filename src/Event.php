@@ -52,7 +52,7 @@ class Event
         }
     }
 
-    public function executeCommand(array $event)
+    private function executeCommand(array $event)
     {
         if ($event["t"] == "MESSAGE_CREATE") {
             $args = explode(" ", $event["d"]["content"]);
@@ -119,7 +119,7 @@ class Event
         }
     }
 
-    public function loadEvents()
+    private function loadEvents()
     {
         try {
             foreach (glob(__DIR__ . "/Events/*.php", GLOB_BRACE) as $file) {
@@ -169,7 +169,7 @@ class Event
             "op" => 6,
             "d" => [
                 "token" => $this->discord->getBotToken(),
-                "session_id" => $this->sessionBotID,
+                "session_id" => $this->discord->botSessionId,
                 "seq" => 1337
             ]
         ]);
