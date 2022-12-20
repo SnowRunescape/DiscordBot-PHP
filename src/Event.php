@@ -12,7 +12,8 @@ class Event
 {
     const OP = [
         "DISCONNECT" => 9,
-        "AUTHENTICATION" => 10
+        "AUTHENTICATION" => 10,
+        "HEARTBEAT_ACK" => 11
     ];
 
     private array $commandsHandler = [];
@@ -52,7 +53,7 @@ class Event
         }
     }
 
-    public function executeCommand(array $event)
+    private function executeCommand(array $event)
     {
         if ($event["t"] == "MESSAGE_CREATE") {
             $args = explode(" ", $event["d"]["content"]);
@@ -119,7 +120,7 @@ class Event
         }
     }
 
-    public function loadEvents()
+    private function loadEvents()
     {
         try {
             foreach (glob(__DIR__ . "/Events/*.php", GLOB_BRACE) as $file) {
@@ -169,18 +170,18 @@ class Event
             "op" => 6,
             "d" => [
                 "token" => $this->discord->getBotToken(),
-                "session_id" => $this->sessionBotID,
+                "session_id" => $this->discord->botSessionId,
                 "seq" => 1337
             ]
         ]);
     }
 
-    private function disconnect()
+    public function disconnect()
     {
         Logger::Warning("Failed resume session, restarting!");
 
-        $this->socket = null;
-        $this->botConnected = false;
+        $this->discord->socket->close();
+        $this->discord->botConnected = false;
     }
 
     public function registerEventHandler(DiscordEventHandler $class)
