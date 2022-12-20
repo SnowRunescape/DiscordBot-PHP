@@ -54,7 +54,7 @@ class MessageEmbed
      * @param String $url
      * @return Void
      */
-    public function setAuthor(string $name, string $iconUrl, string $url)
+    public function setAuthor(string $name, string $iconUrl, string $url = "")
     {
         $this->embed["author"]["name"] = $name;
         $this->embed["author"]["icon_url"] = $iconUrl;
