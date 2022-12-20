@@ -51,12 +51,12 @@ class Discord
         }
     }
 
-    private function processSocket($stop = 11)
+    private function processSocket(int $stop = Event::OP["HEARTBEAT_ACK"])
     {
         $this->keepAliveSent = false;
         $op = "";
 
-        while ($op !== $stop && $this->socket != null) {
+        while ($op !== $stop) {
             $this->event->executeEvent([
                 "t" => "ON_TICK"
             ]);

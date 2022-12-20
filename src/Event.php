@@ -12,7 +12,8 @@ class Event
 {
     const OP = [
         "DISCONNECT" => 9,
-        "AUTHENTICATION" => 10
+        "AUTHENTICATION" => 10,
+        "HEARTBEAT_ACK" => 11
     ];
 
     private array $commandsHandler = [];
@@ -175,12 +176,12 @@ class Event
         ]);
     }
 
-    private function disconnect()
+    public function disconnect()
     {
         Logger::Warning("Failed resume session, restarting!");
 
-        $this->socket = null;
-        $this->botConnected = false;
+        $this->discord->socket->close();
+        $this->discord->botConnected = false;
     }
 
     public function registerEventHandler(DiscordEventHandler $class)

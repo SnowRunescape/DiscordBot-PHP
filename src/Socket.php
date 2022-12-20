@@ -16,6 +16,11 @@ class Socket
         $this->socket = new Client($wss);
     }
 
+    public function isConnected()
+    {
+        return $this->socket->isConnected();
+    }
+
     public function send($message)
     {
         if (is_array($message)) {
@@ -28,5 +33,10 @@ class Socket
     public function receive()
     {
         return json_decode($this->socket->receive(), true);
+    }
+
+    public function close()
+    {
+        $this->socket->close();
     }
 }
