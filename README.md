@@ -4,37 +4,42 @@ DiscordBot-PHP is a powerful [PHP](https://github.com/php) module that allows yo
 ![Console](https://i.imgur.com/2Svi59h.png)
 
 # Installation
-PHP 5.6 or newer is required.
+Preferred way to install is with [Composer](https://getcomposer.org/).
+
+```
+composer require snowrunescape/discord-bot-php
+```
+
+PHP 7.4 or newer is required.
 
 # Example usage
 ```PHP
-require 'vendor/autoload.php';
+require_once "vendor/autoload.php";
 
-require 'src/DiscordPHP.php';
+use DiscordPHP\Discord;
 
-$DiscordPHP = new DiscordPHP('YOU_DISCORD_BOT_TOKEN');
-
-$DiscordPHP->includePlugins();
-
-$DiscordPHP->init();
+$discord = new Discord("YOU_DISCORD_BOT_TOKEN");
+$discord->run();
 ```
-
-``$DiscordPHP->includePlugins();`` includes automatically all commands and events found in the ``plugins`` folder
 
 ### Example Command
 
 ```PHP
-class Hello extends DiscordCommand {
-    public function getCommand(){
-        return '!hello';
+class Ping extends DiscordCommand
+{
+    public function getCommand()
+    {
+        return "!ping";
     }
-  
-    public function onInit(){
-        Logger::Info('Starting command...');
+
+    public function onInit()
+    {
+        Logger::Info("Starting command...");
     }
-	
-    public function run($DiscordPHP, $args, $event){
-        $DiscordPHP->createMessage('Hey, Hello World :D', $event['channel_id']);
+
+    public function run(array $event, array $args)
+    {
+        $this->discord->discordAPI->createMessage("Pong!", $event["channel_id"]);
     }
 }
 ```
@@ -42,21 +47,24 @@ class Hello extends DiscordCommand {
 Events can be created inside commands, to keep the code organized
 
 ```PHP
-public function MESSAGE_CREATE($DiscordPHP, $event){
-    Logger::Info('This event handler has been called!');
+public function MESSAGE_CREATE($event)
+{
+    Logger::Info("This event handler has been called!");
 }
 ```
 
 ### Example eventHandler
 
 ```PHP
-class MESSAGE_CREATE extends DiscordEventHandler {
-    public function onInit(){
-        Logger::Info('Starting eventHandler...');
+class MESSAGE_CREATE extends DiscordEventHandler
+{
+    public function onInit() {
+        Logger::Info("Starting eventHandler...");
     }
-    
-    public function run($DiscordPHP, $event){
-        Logger::Info('This event handler has been called!');
+
+    public function run(array $event)
+    {
+        Logger::Info("This event handler has been called!");
     }
 }
 ```
