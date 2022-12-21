@@ -22,6 +22,18 @@ $discord = new Discord("YOU_DISCORD_BOT_TOKEN");
 $discord->run();
 ```
 
+Register commands and events before triggering the `$discord->run();`
+
+To register a command use the code
+```PHP
+$discord->event->registerCommand(new Ping($discord));
+```
+
+To register events use the code
+```PHP
+$discord->event->registerEventHandler(new MESSAGE_CREATE($discord));
+```
+
 ### Example Command
 
 ```PHP
