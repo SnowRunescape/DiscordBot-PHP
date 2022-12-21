@@ -24,7 +24,7 @@ class Discord
 
     public function __construct(string $token)
     {
-        Logger::Info("Starting DiscordPHP v3.0.2");
+        Logger::Info("Starting DiscordPHP 3.0.3");
 
         $this->token = $token;
 
@@ -40,14 +40,22 @@ class Discord
 
     public function run()
     {
-        $this->processSocket(0);
+        while (!$this->botForceStop) {
+            try {
+                $this->processSocket(0);
 
-        while (
-            $this->botConnected &&
-            !$this->botForceStop &&
-            $this->socket
-        ) {
-            $this->processSocket();
+                while (
+                    $this->botConnected &&
+                    !$this->botForceStop &&
+                    $this->socket
+                ) {
+                    $this->processSocket();
+                }
+            } catch (Exception $e) {
+                Logger::Warning("Connection lost, attempting to reconnect in 10 seconds...");
+
+                sleep(10);
+            }
         }
     }
 
@@ -77,7 +85,7 @@ class Discord
                 if (is_null($receive) && !$this->botConnected) {
                     $this->botForceStop = true;
 
-                    Logger::Warning('Failed to authenticate TOKEN to discord!');
+                    Logger::Warning("Failed to authenticate TOKEN to discord!");
                     return;
                 }
 
