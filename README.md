@@ -13,6 +13,8 @@ composer require snowrunescape/discord-bot-php
 PHP 7.4 or newer is required.
 
 # Example usage
+You can see an example of how to use it by [clicking here](https://github.com/SnowRunescape/DiscordBot-PHP-Example).
+
 ```PHP
 require_once "vendor/autoload.php";
 
