@@ -187,7 +187,8 @@ class Event
     public function registerEventHandler(DiscordEventHandler $class)
     {
         try {
-            $className = max(explode("\\", get_class($class)));
+            $classArray = explode("\\", get_class($class));
+            $className = end($classArray);
 
             if ((in_array($className, self::$defaultEventsHandler)) || ($className == "ON_TICK")) {
                 if (!array_key_exists($className, $this->eventsHandler)) {
