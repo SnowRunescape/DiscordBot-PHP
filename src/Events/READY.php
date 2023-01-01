@@ -14,7 +14,7 @@ class READY extends DiscordEventHandler
         if (!$this->discord->botConnected) {
             $this->discord->botConnected = true;
 
-            $this->discord->botSessionId = $event["d"]["session_id"];
+            $this->discord->botSessionId = $event["session_id"];
 
             Logger::Info("Bot has been authenticated successfully!");
             Logger::Info("SessionID of the current connection is {$this->discord->botSessionId}");
