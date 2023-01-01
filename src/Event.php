@@ -91,7 +91,7 @@ class Event
 
             if (array_key_exists($event["t"], $this->eventsHandler)) {
                 try {
-                    $this->eventsHandler[$event["t"]]->run($event);
+                    $this->eventsHandler[$event["t"]]->run($event["d"]);
                 } catch (Exception $e) {
                     $className = get_class($this->eventsHandler[$event["t"]]);
 
