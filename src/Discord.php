@@ -24,7 +24,7 @@ class Discord
 
     public function __construct(string $token)
     {
-        Logger::Info("Starting DiscordPHP 3.0.4");
+        Logger::Info("Starting DiscordPHP 3.0.5");
 
         $this->token = $token;
 
@@ -66,7 +66,8 @@ class Discord
 
         while ($op !== $stop) {
             $this->event->executeEvent([
-                "t" => "ON_TICK"
+                "t" => "ON_TICK",
+                "d" => []
             ]);
 
             $receive = null;
