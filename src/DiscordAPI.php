@@ -203,7 +203,7 @@ class DiscordAPI
         ];
 
         if ($contentType) {
-            array_push($httpHeader, "Content-Type: application/json");
+            $httpHeader[] = "Content-Type: application/json";
         }
 
         $curl = curl_init();

@@ -24,7 +24,11 @@ class MessageEmbed
      */
     public function setColor(string $color)
     {
-        $this->embed["color"] = hexdec($color);
+        $color = ltrim($color, "#");
+
+        if (ctype_xdigit($color)) {
+            $this->embed["color"] = hexdec($color);
+        }
     }
 
     /*

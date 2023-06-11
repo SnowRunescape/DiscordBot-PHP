@@ -3,6 +3,7 @@
 namespace DiscordPHP\Events;
 
 use DiscordPHP\Abstracts\DiscordEventHandler;
+use DiscordPHP\Event;
 
 class ON_TICK extends DiscordEventHandler
 {
@@ -16,7 +17,7 @@ class ON_TICK extends DiscordEventHandler
             $this->lastSendKeepAlive = time();
 
             $this->discord->socket->send([
-                "op" => 1,
+                "op" => Event::OP["Heartbeat"],
                 "d" => 251
             ]);
         }

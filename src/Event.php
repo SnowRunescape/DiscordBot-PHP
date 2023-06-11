@@ -11,6 +11,10 @@ use Throwable;
 class Event
 {
     const OP = [
+        "DISPATCH" => 0,
+        "HEARTBEAT" => 1,
+        "IDENTIFY" => 2,
+        "RESUME" => 6,
         "DISCONNECT" => 9,
         "AUTHENTICATION" => 10,
         "HEARTBEAT_ACK" => 11
@@ -20,7 +24,7 @@ class Event
     private array $commandsEventsHandler = [];
     private array $eventsHandler = [];
 
-    private static $defaultEventsHandler = [
+    const EVENTS_HANDLER = [
         "CHANNEL_CREATE", "CHANNEL_UPDATE", "CHANNEL_DELETE", "CHANNEL_PINS_UPDATE", "GUILD_CREATE", "GUILD_UPDATE",
         "GUILD_DELETE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "GUILD_EMOJIS_UPDATE", "GUILD_INTEGRATIONS_UPDATE",
         "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_MEMBER_UPDATE", "GUILD_MEMBERS_CHUNK", "GUILD_ROLE_CREATE",
@@ -41,14 +45,14 @@ class Event
 
     public function eventHandler(array $event)
     {
-        if ($event["op"] == 0) {
+        if ($event["op"] == self::OP["DISPATCH"]) {
             $this->executeCommand($event);
             $this->executeEvent($event);
-        } else if ($event["op"] == self::OP["AUTHENTICATION"]) {
+        } elseif ($event["op"] == self::OP["AUTHENTICATION"]) {
             $this->discord->botConnected ?
                 $this->reconnect() :
                 $this->authentication();
-        } else if ($event["op"] == self::OP["DISCONNECT"]) {
+        } elseif ($event["op"] == self::OP["DISCONNECT"]) {
             $this->disconnect();
         }
     }
@@ -130,7 +134,7 @@ class Event
                 $class = new $className($this->discord);
                 $this->registerEventHandler($class);
             }
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             echo $th;
         }
     }
@@ -140,7 +144,7 @@ class Event
         Logger::Info("Authenticating bot to discord...");
 
         $this->discord->socket->send([
-            "op" => 2,
+            "op" => self::OP["IDENTIFY"],
             "d" => [
                 "token" => $this->discord->getBotToken(),
                 "intents" => 65535,
@@ -167,7 +171,7 @@ class Event
         Logger::Warning("Connection lost, trying to reconnect...");
 
         $this->discord->socket->send([
-            "op" => 6,
+            "op" => self::OP["RESUME"],
             "d" => [
                 "token" => $this->discord->getBotToken(),
                 "session_id" => $this->discord->botSessionId,
@@ -190,7 +194,7 @@ class Event
             $classArray = explode("\\", get_class($class));
             $className = end($classArray);
 
-            if ((in_array($className, self::$defaultEventsHandler)) || ($className == "ON_TICK")) {
+            if (in_array($className, self::EVENTS_HANDLER) || ($className == "ON_TICK")) {
                 if (!array_key_exists($className, $this->eventsHandler)) {
                     $this->eventsHandler[$className] = $class;
 
@@ -213,7 +217,6 @@ class Event
         if (array_key_exists($command, $this->commandsHandler)) {
             Logger::Warning("Command {$command} has already been registered!");
             return;
-
         }
 
         $this->commandsHandler[$command] = $class;
@@ -224,7 +227,7 @@ class Event
         $classMethods = get_class_methods($class);
 
         foreach ($classMethods as $classMethod) {
-            if ((in_array($classMethod, self::$defaultEventsHandler)) || ($classMethod == "ON_TICK")) {
+            if (in_array($classMethod, self::EVENTS_HANDLER) || ($classMethod == "ON_TICK")) {
                 $this->commandsEventsHandler[$classMethod][$command] = $class;
 
                 Logger::Info("Event {$classMethod} of the command {$command} has ben Registred!");
