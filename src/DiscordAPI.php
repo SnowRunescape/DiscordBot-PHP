@@ -25,7 +25,7 @@ class DiscordAPI
      */
     public function listGuildMembers($guildId)
     {
-        return $this->curlRequest("{$this->discordURI}/guilds/{$guildId}/members?limit=1000", "GET");
+        return $this->curlRequest("/guilds/{$guildId}/members?limit=1000");
     }
 
     /*
@@ -36,7 +36,7 @@ class DiscordAPI
      */
     public function getGuildMember($guildId, $memberId)
     {
-        return $this->curlRequest("{$this->discordURI}/guilds/{$guildId}/members/{$memberId}", "GET");
+        return $this->curlRequest("/guilds/{$guildId}/members/{$memberId}");
     }
 
     /*
@@ -48,7 +48,11 @@ class DiscordAPI
      */
     public function addGuildMemberRole($guildId, $memberId, $roleId)
     {
-        $this->curlRequest("{$this->discordURI}/guilds/{$guildId}/members/{$memberId}/roles/{$roleId}", "PUT", http_build_query(array()));
+        $this->curlRequest(
+            "/guilds/{$guildId}/members/{$memberId}/roles/{$roleId}",
+            "PUT",
+            http_build_query([])
+        );
     }
 
     /*
@@ -60,7 +64,11 @@ class DiscordAPI
      */
     public function removeGuildMemberRole($guildId, $memberId, $roleId)
     {
-        $this->curlRequest("{$this->discordURI}/guilds/{$guildId}/members/{$memberId}/roles/{$roleId}", "DELETE", http_build_query(array()));
+        $this->curlRequest(
+            "/guilds/{$guildId}/members/{$memberId}/roles/{$roleId}",
+            "DELETE",
+            http_build_query([])
+        );
     }
 
     /*
@@ -74,12 +82,12 @@ class DiscordAPI
     {
         $emoji = urlencode($emoji);
 
-        $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages/{$messageId}/reactions/{$emoji}/@me", "PUT");
+        $this->curlRequest("/channels/{$channelId}/messages/{$messageId}/reactions/{$emoji}/@me", "PUT");
     }
 
     public function deleteAllReactions($channelId, $messageId)
     {
-        $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages/{$messageId}/reactions", "DELETE");
+        $this->curlRequest("/channels/{$channelId}/messages/{$messageId}/reactions", "DELETE");
     }
 
     /*
@@ -90,7 +98,7 @@ class DiscordAPI
      */
     public function getChannelMessages($channelId, $limit = 50)
     {
-        return $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages?limit={$limit}", "GET");
+        return $this->curlRequest("/channels/{$channelId}/messages?limit={$limit}");
     }
 
     /*
@@ -107,7 +115,7 @@ class DiscordAPI
         $json->content = $message;
         $json->embed = $messageEmbed;
 
-        return $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages", "POST", json_encode($json), true);
+        return $this->curlRequest("/channels/{$channelId}/messages", "POST", json_encode($json), true);
     }
 
     /*
@@ -126,7 +134,7 @@ class DiscordAPI
         $json->flags = 2;
         $json->embed = ($messageEmbed ? $messageEmbed->getEmbed() : "");
 
-        $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages/{$messageId}", "PATCH", json_encode($json), true);
+        $this->curlRequest("/channels/{$channelId}/messages/{$messageId}", "PATCH", json_encode($json), true);
     }
 
     /*
@@ -137,7 +145,7 @@ class DiscordAPI
      */
     public function deleteMessage($channelId, $messageId)
     {
-        $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages/{$messageId}", "DELETE");
+        $this->curlRequest("/channels/{$channelId}/messages/{$messageId}", "DELETE");
     }
 
     /*
@@ -148,7 +156,7 @@ class DiscordAPI
      */
     public function deleteMessages($channelId, $messageId)
     {
-        $this->curlRequest("{$this->discordURI}/channels/{$channelId}/messages/bulk-delete", "POST", json_encode($messageId), true);
+        $this->curlRequest("/channels/{$channelId}/messages/bulk-delete", "POST", json_encode($messageId), true);
     }
 
     /*
@@ -158,7 +166,7 @@ class DiscordAPI
      */
     public function getGuildInvites($guildId)
     {
-        return $this->curlRequest("{$this->discordURI}/guilds/{$guildId}/invites", "GET");
+        return $this->curlRequest("/guilds/{$guildId}/invites");
     }
 
     /*
@@ -175,7 +183,7 @@ class DiscordAPI
         $json->max_age = $max_age;
         $json->unique = $unique;
 
-        return $this->curlRequest("{$this->discordURI}/channels/{$channelId}/invites", "POST", json_encode($json), true);
+        return $this->curlRequest("/channels/{$channelId}/invites", "POST", json_encode($json), true);
     }
 
     /*
@@ -185,7 +193,7 @@ class DiscordAPI
      */
     public function getInvite($inviteCode)
     {
-        return $this->curlRequest("{$this->discordURI}/invites/{$inviteCode}", "GET", null, true);
+        return $this->curlRequest("/invites/{$inviteCode}", "GET", null, true);
     }
 
     /*
@@ -196,7 +204,7 @@ class DiscordAPI
      * @param Boolean $contentType
      * @return Array
      */
-    private function curlRequest($url, $customRequest, $postFields = null, $contentType = false)
+    private function curlRequest($url, $customRequest = "GET", $postFields = null, $contentType = false)
     {
         $httpHeader = [
             "Authorization: Bot {$this->discord->getBotToken()}"
@@ -209,7 +217,7 @@ class DiscordAPI
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL            => $url,
+            CURLOPT_URL            => "{$this->discordURI}/{$url}",
             CURLOPT_HTTPHEADER     => $httpHeader,
             CURLOPT_CUSTOMREQUEST  => $customRequest,
             CURLOPT_POSTFIELDS     => $postFields,
