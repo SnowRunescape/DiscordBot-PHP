@@ -17,7 +17,7 @@ class ON_TICK extends DiscordEventHandler
             $this->lastSendKeepAlive = time();
 
             $this->discord->socket->send([
-                "op" => Event::OP["Heartbeat"],
+                "op" => Event::OP["HEARTBEAT"],
                 "d" => 251
             ]);
         }
