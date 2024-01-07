@@ -108,12 +108,15 @@ class DiscordAPI
      * @param MessageEmbed $messageEmbed
      * @return Array
      */
-    public function createMessage($message, $channelId, $messageEmbed = "")
+    public function createMessage($message, $channelId, $messageEmbed = null)
     {
         $json = new \stdClass();
 
         $json->content = $message;
-        $json->embed = $messageEmbed;
+
+        if ($messageEmbed) {
+            $json->embeds = [$messageEmbed];
+        }
 
         return $this->curlRequest("/channels/{$channelId}/messages", "POST", json_encode($json), true);
     }
@@ -132,7 +135,10 @@ class DiscordAPI
 
         $json->content = $newMessage;
         $json->flags = 2;
-        $json->embed = ($messageEmbed ? $messageEmbed->getEmbed() : "");
+
+        if ($messageEmbed) {
+            $json->embeds = [$messageEmbed];
+        }
 
         $this->curlRequest("/channels/{$channelId}/messages/{$messageId}", "PATCH", json_encode($json), true);
     }
