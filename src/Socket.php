@@ -32,7 +32,13 @@ class Socket
 
     public function receive()
     {
-        return json_decode($this->socket->receive(), true);
+        $data = $this->socket->receive();
+
+        if (!$data) {
+            return [];
+        }
+
+        return json_decode($data, true);
     }
 
     public function close()
