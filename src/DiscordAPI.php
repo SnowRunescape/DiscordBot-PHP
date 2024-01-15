@@ -115,7 +115,7 @@ class DiscordAPI
         $json->content = $message;
 
         if ($messageEmbed) {
-            $json->embeds = [$messageEmbed];
+            $json->embeds = [$messageEmbed->getEmbed()];
         }
 
         return $this->curlRequest("/channels/{$channelId}/messages", "POST", json_encode($json), true);
@@ -137,7 +137,7 @@ class DiscordAPI
         $json->flags = 2;
 
         if ($messageEmbed) {
-            $json->embeds = [$messageEmbed];
+            $json->embeds = [$messageEmbed->getEmbed()];
         }
 
         $this->curlRequest("/channels/{$channelId}/messages/{$messageId}", "PATCH", json_encode($json), true);
