@@ -45,36 +45,42 @@ class Event
 
     public function eventHandler(array $event)
     {
-        if ($event["op"] == self::OP["DISPATCH"]) {
-            $this->executeCommand($event);
-            $this->executeEvent($event);
-        } elseif ($event["op"] == self::OP["AUTHENTICATION"]) {
-            $this->discord->botConnected ?
-                $this->reconnect() :
-                $this->authentication();
-        } elseif ($event["op"] == self::OP["DISCONNECT"]) {
-            $this->disconnect();
+        switch ($event["op"]) {
+            case self::OP["DISPATCH"]:
+                $this->executeCommand($event);
+                $this->executeEvent($event);
+                break;
+            case self::OP["AUTHENTICATION"]:
+                $this->discord->botConnected ?
+                    $this->reconnect() :
+                    $this->authentication();
+                break;
+            case self::OP["DISCONNECT"]:
+                $this->disconnect();
+                break;
         }
     }
 
     private function executeCommand(array $event)
     {
-        if ($event["t"] == "MESSAGE_CREATE") {
-            $args = explode(" ", $event["d"]["content"]);
+        if ($event["t"] != "MESSAGE_CREATE") {
+            return;
+        }
 
-            $command = strtolower($args[0]);
+        $args = explode(" ", $event["d"]["content"]);
 
-            if (array_key_exists($command, $this->commandsHandler)) {
-                Logger::Info("Command {$command} has ben Detected!");
+        $command = strtolower($args[0]);
 
-                try {
-                    $this->commandsHandler[$command]->run($event["d"], $args);
-                } catch (Throwable $e) {
-                    $className = get_class($this->commandsHandler[$command]);
+        if (array_key_exists($command, $this->commandsHandler)) {
+            Logger::Info("Command {$command} has been Detected!");
 
-                    Logger::Warning("Error when executing the class {$className}!");
-                    Logger::Warning($e->getMessage());
-                }
+            try {
+                $this->commandsHandler[$command]->run($event["d"], $args);
+            } catch (Throwable $e) {
+                $className = get_class($this->commandsHandler[$command]);
+
+                Logger::Warning("Error when executing the class {$className}!");
+                Logger::Warning($e->getMessage());
             }
         }
     }
@@ -90,7 +96,7 @@ class Event
             array_key_exists($event["t"], $this->commandsEventsHandler)
         ) {
             if ($event["t"] != "ON_TICK") {
-                Logger::Info("Event {$event["t"]} has ben received!");
+                Logger::Info("Event {$event["t"]} has been received!");
             }
 
             if (array_key_exists($event["t"], $this->eventsHandler)) {
@@ -198,7 +204,7 @@ class Event
                 if (!array_key_exists($className, $this->eventsHandler)) {
                     $this->eventsHandler[$className] = $class;
 
-                    Logger::Info("Event {$className} has ben Registred!");
+                    Logger::Info("Event {$className} has been registered!");
                 } else {
                     Logger::Warning("Event {$className} has already been registered!");
                 }
@@ -222,7 +228,7 @@ class Event
         $this->commandsHandler[$command] = $class;
         $this->commandsHandler[$command]->onInit();
 
-        Logger::Info("Command {$command} has ben Registred!");
+        Logger::Info("Command {$command} has been registered!");
 
         $classMethods = get_class_methods($class);
 
@@ -230,7 +236,7 @@ class Event
             if (in_array($classMethod, self::EVENTS_HANDLER) || ($classMethod == "ON_TICK")) {
                 $this->commandsEventsHandler[$classMethod][$command] = $class;
 
-                Logger::Info("Event {$classMethod} of the command {$command} has ben Registred!");
+                Logger::Info("Event {$classMethod} of the command {$command} has been registered!");
             }
         }
     }
