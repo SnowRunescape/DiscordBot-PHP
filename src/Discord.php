@@ -24,7 +24,7 @@ class Discord
 
     public function __construct(string $token)
     {
-        Logger::Info("Starting DiscordPHP 3.0.8");
+        Logger::Info("Starting DiscordPHP 3.1.0");
 
         $this->token = $token;
 
