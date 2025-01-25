@@ -7,8 +7,6 @@ use DiscordPHP\Logging\Logger;
 
 class READY extends DiscordEventHandler
 {
-    public function onInit() {}
-
     public function run($event)
     {
         if (!$this->discord->botConnected) {

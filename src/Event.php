@@ -3,7 +3,7 @@
 namespace DiscordPHP;
 
 use DiscordPHP\Abstracts\DiscordCommand;
-use DiscordPHP\Abstracts\DiscordEventHandler;
+use DiscordPHP\Interfaces\DiscordEventHandlerInterface;
 use DiscordPHP\Logging\Logger;
 use Exception;
 use Throwable;
@@ -194,7 +194,7 @@ class Event
         $this->discord->botConnected = false;
     }
 
-    public function registerEventHandler(DiscordEventHandler $class)
+    public function registerEventHandler(DiscordEventHandlerInterface $class)
     {
         try {
             $classArray = explode("\\", get_class($class));

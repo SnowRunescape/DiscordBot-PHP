@@ -3,8 +3,9 @@
 namespace DiscordPHP\Abstracts;
 
 use DiscordPHP\Discord;
+use DiscordPHP\Interfaces\DiscordEventHandlerInterface;
 
-abstract class DiscordEventHandler
+abstract class DiscordEventHandler implements DiscordEventHandlerInterface
 {
     protected Discord $discord;
 
@@ -13,6 +14,5 @@ abstract class DiscordEventHandler
         $this->discord = $discord;
     }
 
-    abstract public function onInit();
-    abstract public function run(array $event);
+    public function onInit() {}
 }

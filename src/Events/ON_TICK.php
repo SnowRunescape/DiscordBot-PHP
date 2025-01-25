@@ -9,8 +9,6 @@ class ON_TICK extends DiscordEventHandler
 {
     private int $lastSendKeepAlive = 0;
 
-    public function onInit() {}
-
     public function run($event)
     {
         if (time() >= ($this->lastSendKeepAlive + 30)) {
