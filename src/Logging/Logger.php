@@ -4,7 +4,7 @@ namespace DiscordPHP\Logging;
 
 class Logger
 {
-    private static $SaveLog = true;
+    private static $saveLog = true;
     private static $fpLoghasOpened = false;
 
     private static $fpLog;
@@ -21,7 +21,7 @@ class Logger
 
         echo $t;
 
-        if (self::$SaveLog) {
+        if (self::$saveLog) {
             if (!self::$fpLoghasOpened) {
                 self::$fpLoghasOpened = true;
 
