@@ -2,7 +2,7 @@
 
 namespace DiscordPHP;
 
-use DiscordPHP\Abstracts\DiscordCommand;
+use DiscordPHP\Interfaces\DiscordCommandInterface;
 use DiscordPHP\Interfaces\DiscordEventHandlerInterface;
 use DiscordPHP\Logging\Logger;
 use Exception;
@@ -216,7 +216,7 @@ class Event
         }
     }
 
-    public function registerCommand(DiscordCommand $class)
+    public function registerCommand(DiscordCommandInterface $class)
     {
         $command = strtolower($class->getCommand());
 

@@ -3,8 +3,9 @@
 namespace DiscordPHP\Abstracts;
 
 use DiscordPHP\Discord;
+use DiscordPHP\Interfaces\DiscordCommandInterface;
 
-abstract class DiscordCommand
+abstract class DiscordCommand implements DiscordCommandInterface
 {
     protected Discord $discord;
 
@@ -13,7 +14,5 @@ abstract class DiscordCommand
         $this->discord = $discord;
     }
 
-    abstract public function getCommand();
-    abstract public function onInit();
-    abstract public function run(array $event, array $args);
+    public function onInit() {}
 }
