@@ -91,6 +91,41 @@ class DiscordAPI
     }
 
     /*
+     * Metodo para pegar informação de um canal
+     * @param Integer $channelId
+     * @return Array
+    */
+    public function getChannel($channelId)
+    {
+        return $this->curlRequest("/channels/{$channelId}", "GET");
+    }
+
+    /*
+     * Metodo para criar um canal
+     * @param Integer $guildId
+     * @param Array $json
+     * @return Array
+    */
+    public function createChannel($guildId, array $json)
+    {
+        if (!isset($json["name"])) {
+            return false;
+        }
+
+        return $this->curlRequest("/guilds/{$guildId}/channels", "POST", json_encode($json), true);
+    }
+
+    /*
+     * Metodo para deletar um canal
+     * @param Integer $channelId
+     * @return Array
+    */
+    public function deleteChannel($channelId)
+    {
+        return $this->curlRequest("/channels/{$channelId}", "DELETE");
+    }
+
+    /*
      * Metodo para pegar as ultimas mensagens de um canal
      * @param Integer $channelId
      * @param Integer $limit
