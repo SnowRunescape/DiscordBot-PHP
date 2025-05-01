@@ -248,7 +248,7 @@ class DiscordAPI
     private function curlRequest($url, $customRequest = "GET", $postFields = null, $contentType = false)
     {
         $httpHeader = [
-            "Authorization: Bot {$this->discord->getBotToken()}"
+            "Authorization: Bot {$this->discord->getBotToken()}",
         ];
 
         if ($contentType) {
@@ -265,7 +265,7 @@ class DiscordAPI
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_VERBOSE        => 0,
-            CURLOPT_SSL_VERIFYPEER => 0
+            CURLOPT_SSL_VERIFYPEER => 0,
         ]);
 
         $curlResponse = curl_exec($curl);

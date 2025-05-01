@@ -58,13 +58,13 @@ class MessageEmbedTest extends TestCase
             [
                 "name" => "Test Field 1",
                 "value" => "Test Field Value 1",
-                "inline" => false
+                "inline" => false,
             ],
             [
                 "name" => "Test Field 2",
                 "value" => "Test Field Value 2",
-                "inline" => true
-            ]
+                "inline" => true,
+            ],
         ]));
 
         $embed->addFields($fields);
