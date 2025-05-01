@@ -9,8 +9,8 @@ class Logger
 
     private static $fpLog;
 
-    const LOGGER_ID_0 = "INFO";
-    const LOGGER_ID_1 = "WARNING";
+    public const LOGGER_ID_0 = "INFO";
+    public const LOGGER_ID_1 = "WARNING";
 
     private static function console(string $text, string $type)
     {

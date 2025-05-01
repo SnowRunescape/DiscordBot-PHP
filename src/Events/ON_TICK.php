@@ -16,7 +16,7 @@ class ON_TICK extends DiscordEventHandler
 
             $this->discord->socket->send([
                 "op" => Event::OP["HEARTBEAT"],
-                "d" => 251
+                "d" => 251,
             ]);
         }
     }

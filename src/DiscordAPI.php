@@ -91,6 +91,41 @@ class DiscordAPI
     }
 
     /*
+     * Metodo para pegar informação de um canal
+     * @param Integer $channelId
+     * @return Array
+    */
+    public function getChannel($channelId)
+    {
+        return $this->curlRequest("/channels/{$channelId}", "GET");
+    }
+
+    /*
+     * Metodo para criar um canal
+     * @param Integer $guildId
+     * @param Array $json
+     * @return Array
+    */
+    public function createChannel($guildId, array $json)
+    {
+        if (!isset($json["name"])) {
+            return false;
+        }
+
+        return $this->curlRequest("/guilds/{$guildId}/channels", "POST", json_encode($json), true);
+    }
+
+    /*
+     * Metodo para deletar um canal
+     * @param Integer $channelId
+     * @return Array
+    */
+    public function deleteChannel($channelId)
+    {
+        return $this->curlRequest("/channels/{$channelId}", "DELETE");
+    }
+
+    /*
      * Metodo para pegar as ultimas mensagens de um canal
      * @param Integer $channelId
      * @param Integer $limit
@@ -213,7 +248,7 @@ class DiscordAPI
     private function curlRequest($url, $customRequest = "GET", $postFields = null, $contentType = false)
     {
         $httpHeader = [
-            "Authorization: Bot {$this->discord->getBotToken()}"
+            "Authorization: Bot {$this->discord->getBotToken()}",
         ];
 
         if ($contentType) {
@@ -230,7 +265,7 @@ class DiscordAPI
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_FOLLOWLOCATION => 1,
             CURLOPT_VERBOSE        => 0,
-            CURLOPT_SSL_VERIFYPEER => 0
+            CURLOPT_SSL_VERIFYPEER => 0,
         ]);
 
         $curlResponse = curl_exec($curl);

@@ -7,7 +7,7 @@ use Exception;
 
 class Discord
 {
-    const DISCORD_WSS = "wss://gateway.discord.gg/?v=10&encoding=json";
+    public const DISCORD_WSS = "wss://gateway.discord.gg/?v=10&encoding=json";
 
     private string $token;
 
@@ -24,7 +24,7 @@ class Discord
 
     public function __construct(string $token)
     {
-        Logger::Info("Starting DiscordPHP 3.1.0");
+        Logger::Info("Starting DiscordPHP 3.2.0");
 
         $this->token = $token;
 
@@ -67,7 +67,7 @@ class Discord
         while ($op !== $stop) {
             $this->event->executeEvent([
                 "t" => "ON_TICK",
-                "d" => []
+                "d" => [],
             ]);
 
             $receive = null;

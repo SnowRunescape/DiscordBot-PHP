@@ -108,8 +108,8 @@ class MessageEmbed
             0 => [
                 "name" => $name,
                 "value" => $value,
-                "inline" => $inline
-            ]
+                "inline" => $inline,
+            ],
         ];
     }
 
