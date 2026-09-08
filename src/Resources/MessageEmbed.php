@@ -104,12 +104,10 @@ class MessageEmbed
      */
     public function addField(string $name, string $value, bool $inline = false)
     {
-        $this->embed["fields"] = [
-            0 => [
-                "name" => $name,
-                "value" => $value,
-                "inline" => $inline,
-            ],
+        $this->embed["fields"][] = [
+            "name" => $name,
+            "value" => $value,
+            "inline" => $inline,
         ];
     }
 
@@ -120,7 +118,7 @@ class MessageEmbed
      */
     public function setImage(string $imageUrl)
     {
-        $this->embed["thumbnail"]["url"] = $imageUrl;
+        $this->embed["image"]["url"] = $imageUrl;
     }
 
     /*
@@ -129,7 +127,7 @@ class MessageEmbed
      */
     public function setTimestamp()
     {
-        $this->embed["timestamp"] = date(\DateTime::ISO8601);
+        $this->embed["timestamp"] = date(DATE_ATOM);
     }
 
     /*

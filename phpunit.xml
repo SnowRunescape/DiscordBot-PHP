@@ -1,4 +1,6 @@
 <phpunit
+    bootstrap="vendor/autoload.php"
+    cacheResult="false"
     colors="true"
 >
     <testsuites>

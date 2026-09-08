@@ -15,7 +15,9 @@ class Event
         "HEARTBEAT" => 1,
         "IDENTIFY" => 2,
         "RESUME" => 6,
+        "RECONNECT" => 7,
         "DISCONNECT" => 9,
+        "INVALID_SESSION" => 9,
         "AUTHENTICATION" => 10,
         "HEARTBEAT_ACK" => 11,
     ];
@@ -155,7 +157,7 @@ class Event
                 "token" => $this->discord->getBotToken(),
                 "intents" => 65535,
                 "properties" => [
-                    "\$os" => "windows",
+                    "\$os" => PHP_OS_FAMILY,
                     "\$browser" => "SnowDev",
                     "\$device" => "SnowDev",
                 ],
